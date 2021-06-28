@@ -12,6 +12,12 @@ use App\Controller\AppController;
  */
 class BookmarksController extends AppController
 {
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('Validate');
+    }
+
     /**
      * Index method
      *
@@ -20,11 +26,23 @@ class BookmarksController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Users'],
+            'contain' => ['Users', 'Tags'],
         ];
         $bookmarks = $this->paginate($this->Bookmarks);
 
         $this->set(compact('bookmarks'));
+    }
+    /**
+     * Export Method
+     */
+    public function export($limit = 100)
+    {
+        $limit = $this->Validate->validLimit($limit, 100);
+        $bookmark = $this->Bookmarks->find('forUser', ['user_id' => 1])->limit($limit)
+            ->contain(['Tags' => function ($q) {
+                return $q->where(['Tags.name LIKE' => '%t%']);
+            }]);
+        $this->set('bookmarks', $bookmark);
     }
 
     /**

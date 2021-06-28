@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Bookmark[]|\Cake\Collection\CollectionInterface $bookmarks
@@ -23,26 +24,28 @@
                 <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('title') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('url') ?></th>
+                <th scope="col"># Tags</th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($bookmarks as $bookmark): ?>
-            <tr>
-                <td><?= $this->Number->format($bookmark->id) ?></td>
-                <td><?= $bookmark->has('user') ? $this->Html->link($bookmark->user->firstname, ['controller' => 'Users', 'action' => 'view', $bookmark->user->id]) : '' ?></td>
-                <td><?= h($bookmark->title) ?></td>
-                <td><?= h($bookmark->url) ?></td>
-                <td><?= h($bookmark->created) ?></td>
-                <td><?= h($bookmark->modified) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $bookmark->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $bookmark->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $bookmark->id], ['confirm' => __('Are you sure you want to delete # {0}?', $bookmark->id)]) ?>
-                </td>
-            </tr>
+            <?php foreach ($bookmarks as $bookmark) : ?>
+                <tr>
+                    <td><?= $this->Number->format($bookmark->id) ?></td>
+                    <td><?= $bookmark->has('user') ? $this->Html->link($bookmark->user->firstname, ['controller' => 'Users', 'action' => 'view', $bookmark->user->id]) : '' ?></td>
+                    <td><?= h($bookmark->title) ?></td>
+                    <td><?= $this->element('Bookmarks/url', ['bookmark' => $bookmark]) ?></td>
+                    <td><?= $bookmark->numberOfTags() ?></td>
+                    <td><?= $this->Time->timeAgoInWords($bookmark->created) ?></td>
+                    <td><?= h($bookmark->modified) ?></td>
+                    <td class="actions">
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $bookmark->id]) ?>
+                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $bookmark->id]) ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $bookmark->id], ['confirm' => __('Are you sure you want to delete # {0}?', $bookmark->id)]) ?>
+                    </td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>

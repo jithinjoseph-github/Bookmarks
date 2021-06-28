@@ -42,6 +42,11 @@ class UsersTable extends Table
 
         $this->hasMany('Bookmarks', [
             'foreignKey' => 'user_id',
+            'dependent' => true,
+        ]);
+        $this->hasOne('LastBookmarks', [
+            'className' => 'Bookmarks',
+            'foreignKey' => 'user_id'
         ]);
     }
 

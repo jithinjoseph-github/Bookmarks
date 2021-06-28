@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Symfony\Polyfill\Mbstring\Mbstring;
 
 /**
  * Tag Entity
@@ -30,4 +31,9 @@ class Tag extends Entity
         'modified' => true,
         'bookmarks' => true,
     ];
+
+    protected function _setName($name)
+    {
+        return mb_strtolower($name);
+    }
 }
